@@ -13,14 +13,12 @@
     // Холст.
     this._container = document.createElement('canvas');
     this._ctx = this._container.getContext('2d');
-
     // Создаем холст только после загрузки изображения.
     this._image.onload = function() {
       // Размер холста равен размеру загруженного изображения. Это нужно
       // для удобства работы с координатами.
       this._container.width = this._image.naturalWidth;
       this._container.height = this._image.naturalHeight;
-
       /**
        * Предлагаемый размер кадра в виде коэффициента относительно меньшей
        * стороны изображения.
@@ -37,10 +35,7 @@
       // Изначально предлагаемое кадрирование — часть по центру с размером в 3/4
       // от размера меньшей стороны.
       this._resizeConstraint = new Square(
-          this._container.width / 2 - side / 2,
-          this._container.height / 2 - side / 2,
-          side);
-
+          this._container.width / 2 - side / 2, this._container.height / 2 - side / 2,side);
       // Отрисовка изначального состояния канваса.
       this.setConstraint();
     }.bind(this);
@@ -100,7 +95,6 @@
 
       // Сохранение состояния канваса.
       this._ctx.save();
-
       // Установка начальной точки системы координат в центр холста.
       this._ctx.translate(this._container.width / 2, this._container.height / 2);
 
@@ -111,14 +105,47 @@
       // Координаты задаются от центра холста.
       this._ctx.drawImage(this._image, displX, displY);
 
+      // Отрисовка черного слоя вокруг рамки. Внешний контур.
+
+      this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+
+      this._ctx.beginPath();
+
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
-      this._ctx.strokeRect(
-          (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side - this._ctx.lineWidth / 2);
 
+      this._ctx.moveTo(
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2, 
+        -(this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
+      this._ctx.lineTo(
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2, 
+        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
+      this._ctx.lineTo(
+        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2, 
+        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
+      this._ctx.lineTo(
+        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2, 
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
+      this._ctx.lineTo(
+        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2, 
+        -(this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
+      this._ctx.stroke();
+      
+      this._ctx.rect(
+        -this._container.width / 2,
+        -this._container.height / 2,
+        this._container.width,
+        this._container.height
+      );
+      this._ctx.closePath();
+
+      this._ctx.fill('evenodd');
+      
+      //Вывод размеров кодируемого изображения.
+      this._ctx.font = '16px serif';
+      this._ctx.fillStyle = '#fff';
+      this._ctx.fillText(this._image.naturalWidth + ' х ' + this._image.naturalHeight, -30, (-this._resizeConstraint.side / 2) - 10);
+      
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
       // следующий кадр рисовался с привычной системой координат, где точка
