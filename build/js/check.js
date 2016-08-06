@@ -1,3 +1,5 @@
+'use strict';
+
 function getMessage(a,b) {
     if(typeof a === 'boolean') {        
         return a ? 'Переданное GIF-изображение анимировано и содержит ' + b + ' кадров' : 'Переданное GIF-изображение не анимировано';
