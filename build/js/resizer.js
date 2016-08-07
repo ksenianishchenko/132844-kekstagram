@@ -83,16 +83,6 @@
       // canvas'a поэтому важно вовремя поменять их, если нужно начать отрисовку
       // чего-либо с другой обводкой.
 
-      // Толщина линии.
-      this._ctx.lineWidth = 6;
-      // Цвет обводки.
-      this._ctx.strokeStyle = '#ffe753';
-      // Размер штрихов. Первый элемент массива задает длину штриха, второй
-      // расстояние между соседними штрихами.
-      this._ctx.setLineDash([15, 10]);
-      // Смещение первого штриха от начала линии.
-      this._ctx.lineDashOffset = 7;
-
       // Сохранение состояния канваса.
       this._ctx.save();
       // Установка начальной точки системы координат в центр холста.
@@ -104,6 +94,62 @@
       // нужно отрисовать и координаты его верхнего левого угла.
       // Координаты задаются от центра холста.
       this._ctx.drawImage(this._image, displX, displY);
+
+      //Отрисовка рамки.
+      this._ctx.fillStyle = '#ffe753';
+      var r = 3;
+      var startAngle = 0;
+      var endAngle = 2*Math.PI;
+      var x = -this._resizeConstraint.side / 2;
+      var y = -this._resizeConstraint.side / 2;
+        
+      this._ctx.beginPath();
+        x = -this._resizeConstraint.side / 2;
+        y = -this._resizeConstraint.side / 2;
+        this._ctx.arc( x, y, r, startAngle, endAngle);
+        this._ctx.fill();
+        while (x < this._resizeConstraint.side/2){
+            this._ctx.arc( x, y, r, startAngle, endAngle);
+            this._ctx.fill();
+            x = x + 10;
+        }
+      this._ctx.closePath();
+      
+      this._ctx.beginPath();
+        x = -this._resizeConstraint.side / 2;
+        y = -this._resizeConstraint.side / 2;
+        this._ctx.arc( x, y, r, startAngle, endAngle);
+        this._ctx.fill();
+        while (y < this._resizeConstraint.side/2){
+            this._ctx.arc( x, y, r, startAngle, endAngle);
+            this._ctx.fill();
+            y = y + 10;
+        }
+      this._ctx.closePath();
+
+      this._ctx.beginPath();
+        x = this._resizeConstraint.side / 2;
+        y = -this._resizeConstraint.side / 2;
+        this._ctx.arc( x, y, r, startAngle, endAngle);
+        this._ctx.fill();
+        while (y < this._resizeConstraint.side/2){
+            this._ctx.arc( x, y, r, startAngle, endAngle);
+            this._ctx.fill();
+            y = y + 10;
+        }
+      this._ctx.closePath();
+
+      this._ctx.beginPath();
+        x = -this._resizeConstraint.side / 2;
+        y = this._resizeConstraint.side / 2;
+        this._ctx.arc( x, y, r, startAngle, endAngle);
+        this._ctx.fill();
+        while (x < this._resizeConstraint.side/2){
+            this._ctx.arc( x, y, r, startAngle, endAngle);
+            this._ctx.fill();
+            x = x + 10;
+        }
+      this._ctx.closePath();
 
       // Отрисовка черного слоя вокруг рамки. Внешний контур.
 
@@ -129,7 +175,7 @@
       this._ctx.lineTo(
         (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2, 
         -(this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
-      this._ctx.stroke();
+      
       
       this._ctx.rect(
         -this._container.width / 2,
