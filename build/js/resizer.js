@@ -83,16 +83,6 @@
       // canvas'a поэтому важно вовремя поменять их, если нужно начать отрисовку
       // чего-либо с другой обводкой.
 
-      // Толщина линии.
-      this._ctx.lineWidth = 6;
-      // Цвет обводки.
-      this._ctx.strokeStyle = '#ffe753';
-      // Размер штрихов. Первый элемент массива задает длину штриха, второй
-      // расстояние между соседними штрихами.
-      this._ctx.setLineDash([15, 10]);
-      // Смещение первого штриха от начала линии.
-      this._ctx.lineDashOffset = 7;
-
       // Сохранение состояния канваса.
       this._ctx.save();
       // Установка начальной точки системы координат в центр холста.
@@ -115,21 +105,21 @@
       // кадрирования. Координаты задаются от центра.
 
       this._ctx.moveTo(
-        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2, 
-        -(this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
+        -this._resizeConstraint.side / 2, 
+        -this._resizeConstraint.side / 2);
       this._ctx.lineTo(
-        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2, 
-        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
+        -this._resizeConstraint.side / 2, 
+        this._resizeConstraint.side / 2);
       this._ctx.lineTo(
-        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2, 
-        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
+        this._resizeConstraint.side / 2, 
+        this._resizeConstraint.side / 2);
       this._ctx.lineTo(
-        (this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2, 
-        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
+        this._resizeConstraint.side / 2, 
+        -this._resizeConstraint.side / 2);
       this._ctx.lineTo(
-        (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2, 
-        -(this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2);
-      this._ctx.stroke();
+        -this._resizeConstraint.side / 2, 
+        -this._resizeConstraint.side / 2);
+      
       
       this._ctx.rect(
         -this._container.width / 2,
@@ -140,6 +130,44 @@
       this._ctx.closePath();
 
       this._ctx.fill('evenodd');
+      
+      //Отрисовка рамки.
+      this._ctx.fillStyle = '#ffe753';
+      var r = 3;
+      var startAngle = 0;
+      var endAngle = 2*Math.PI;
+      var ctx = this._ctx;
+      var xMinus = -this._resizeConstraint.side / 2;
+      var xPlus = this._resizeConstraint.side / 2;
+      var yMinus = -this._resizeConstraint.side / 2;
+      var yPlus = this._resizeConstraint.side / 2
+      
+      var drawCircle = function(x,y, xEndPoint, yEndPoint) {
+          ctx.beginPath();
+          ctx.arc( x, y, r, startAngle, endAngle);
+          ctx.fill();
+          while (x < xEndPoint) {
+            ctx.arc( x, y, r, startAngle, endAngle);
+            ctx.fill();
+            x = x + 10;
+          }
+          while (y < yEndPoint) {
+            ctx.arc( x, y, r, startAngle, endAngle);
+            ctx.fill();
+            y = y + 10; 
+          }
+          ctx.closePath();
+      };
+      
+      drawCircle(xMinus, yMinus, xPlus, yMinus);
+      
+      drawCircle(xPlus, yMinus, xPlus, yPlus);
+      
+      drawCircle(xPlus, yPlus, xMinus, yPlus);
+      
+      drawCircle(xMinus, yPlus, xPlus, yPlus);
+      
+      drawCircle(xMinus, yMinus, xMinus, yPlus);
       
       //Вывод размеров кодируемого изображения.
       this._ctx.font = '16px serif';
