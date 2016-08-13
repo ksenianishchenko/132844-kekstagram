@@ -71,8 +71,30 @@
    * Проверяет, валидны ли данные, в форме кадрирования.
    * @return {boolean}
    */
+
   function resizeFormIsValid() {
-    return true;
+    var resizeX = document.getElementById('resize-x').value;
+    var resizeY = document.getElementById('resize-y').value;
+    var resizeSide = document.getElementById('resize-size').value;
+    var naturalImageWidth = currentResizer._image.naturalWidth;
+    var naturalImageHeight = currentResizer._image.naturalHeight;
+    if(((resizeX + resizeSide) > naturalImageWidth)
+    || ((resizeY + resizeSide) > naturalImageHeight)
+    || (resizeX < 0)
+    || (resizeY < 0)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  function validateForm() {
+    var submitBtn = document.getElementById('resize-fwd');
+    if (resizeFormIsValid()) {
+      submitBtn.disabled = false;
+    } else {
+      submitBtn.disabled = true;
+    }
   }
 
   /**
@@ -160,6 +182,7 @@
           resizeForm.classList.remove('invisible');
 
           hideMessage();
+          validateForm();
         };
 
         fileReader.readAsDataURL(element.files[0]);
@@ -259,6 +282,18 @@
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
+  };
+  var inputResizeX = document.getElementById('resize-x');
+  var inputResizeY = document.getElementById('resize-y');
+  var inputResizeSide = document.getElementById('resize-size');
+  inputResizeX.onchange = function() {
+    validateForm();
+  };
+  inputResizeY.onchange = function() {
+    validateForm();
+  };
+  inputResizeSide.onchange = function() {
+    validateForm();
   };
 
   cleanupResizer();
