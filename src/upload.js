@@ -30,6 +30,7 @@
    */
   var fileRegExp = new RegExp('^image/(' + Object.keys(FileType).join('|').replace('\+', '\\+') + ')$', 'i');
 
+
   /**
    * @type {Object.<string, string>}
    */
