@@ -98,7 +98,6 @@
     submitBtn.disabled = !resizeFormIsValid();
   }
 
-
   /**
    * Форма загрузки изображения.
    * @type {HTMLFormElement}
@@ -246,6 +245,10 @@
 
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
+
+      var lastFilter = browserCookies.get('upload-filter') || 'none';
+      document.getElementById('upload-filter-' + lastFilter).checked = true;
+      filterForm.onchange();
     }
   };
 
@@ -300,7 +303,11 @@
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
+
+    // Добавляем выбранный фильтр в куки
+    browserCookies.set('upload-filter', selectedFilter, { expires: expireDate()});
   };
+
   var inputResizeX = document.getElementById('resize-x');
   var inputResizeY = document.getElementById('resize-y');
   var inputResizeSide = document.getElementById('resize-size');
@@ -317,3 +324,22 @@
   cleanupResizer();
   updateBackground();
 })();
+
+var browserCookies = require('browser-cookies');
+
+var expireDate = function() {
+  var currentYear = new Date().getFullYear();
+  var currentMonth = new Date().getMonth();
+  var currentDay = new Date().getDate();
+  var birthDate = new Date(currentYear, 11, 6);
+  var nowDate = new Date(currentYear, currentMonth, currentDay);
+  var expiredMs = 0;
+  if(nowDate > birthDate) {
+    expiredMs = nowDate - birthDate;
+  } else if (nowDate < birthDate) {
+    expiredMs = nowDate - new Date(currentYear - 1, 11, 6);
+  }
+
+  var dayDifference = expiredMs / 1000 / 60 / 60 / 24;
+  return dayDifference;
+};
