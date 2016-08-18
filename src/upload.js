@@ -16,6 +16,10 @@
     'SVG+XML': ''
   };
 
+  var resizeX = document.querySelector('#resize-x');
+  var resizeY = document.querySelector('#resize-y');
+  var resizeSide = document.querySelector('#resize-size');
+
   /** @enum {number} */
   var Action = {
     ERROR: 0,
@@ -74,23 +78,15 @@
    */
 
   function resizeFormIsValid() {
-    var resizeX = document.getElementById('resize-x');
-    var resizeY = document.getElementById('resize-y');
-    var resizeSide = document.getElementById('resize-size');
-    resizeX.min = 0;
-    resizeY.min = 0;
-    resizeX.step = 1;
-    resizeY.step = 1;
-    resizeSide.step = 1;
-    resizeX.autocomplete = 'off';
-    resizeY.autocomplete = 'off';
-    resizeSide.autocomplete = 'off';
     var naturalImageWidth = currentResizer._image.naturalWidth;
     var naturalImageHeight = currentResizer._image.naturalHeight;
-    if(((resizeX.value + resizeSide.value) > naturalImageWidth)
-    || ((resizeY.value + resizeSide.value) > naturalImageHeight)
-    || (resizeX.value < 0)
-    || (resizeY.value < 0)) {
+    var parseIntX = parseInt(resizeX.value, 10);
+    var parseIntY = parseInt(resizeY.value, 10);
+    var parseIntSide = parseInt(resizeSide.value, 10);
+    if((parseIntX + parseIntSide > naturalImageWidth)
+    || (parseIntY + parseIntSide > naturalImageHeight)
+    || (parseIntX < 0 )
+    || (parseIntY < 0)) {
       return false;
     } else {
       return true;
@@ -187,7 +183,6 @@
           resizeForm.classList.remove('invisible');
 
           hideMessage();
-          validateForm();
         };
 
         fileReader.readAsDataURL(element.files[0]);
@@ -196,6 +191,23 @@
         showMessage(Action.ERROR);
       }
     }
+  };
+
+  function parseNumber(str) {
+    return str.replace(/\D/g, '');
+  }
+
+  resizeX.oninput = function() {
+    this.value = parseNumber(this.value);
+    validateForm();
+  };
+  resizeY.oninput = function() {
+    this.value = parseNumber(this.value);
+    validateForm();
+  };
+  resizeSide.oninput = function() {
+    this.value = parseNumber(this.value);
+    validateForm();
   };
 
   /**
@@ -234,7 +246,7 @@
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
 
-      var lastFilter = cookies.get('upload-filter') || 'none';
+      var lastFilter = browserCookies.get('upload-filter') || 'none';
       document.getElementById('upload-filter-' + lastFilter).checked = true;
       filterForm.onchange();
     }
@@ -293,7 +305,7 @@
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
 
     // Добавляем выбранный фильтр в куки
-    cookies.set('upload-filter', selectedFilter, { expires: expireDate()});
+    browserCookies.set('upload-filter', selectedFilter, { expires: expireDate()});
   };
 
   var inputResizeX = document.getElementById('resize-x');
@@ -313,7 +325,7 @@
   updateBackground();
 })();
 
-var cookies = require('browser-cookies');
+var browserCookies = require('browser-cookies');
 
 var expireDate = function() {
   var currentYear = new Date().getFullYear();
