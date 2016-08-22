@@ -3,7 +3,6 @@
 window.pictures = [];
 window.picturesList = function(pics) {
   window.pictures = pics;
-  console.log(window.pictures);
 };
 
 var createRequest = function(src, jsonCallBack) {
