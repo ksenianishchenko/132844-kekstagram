@@ -36,16 +36,15 @@ var getPictureBlock = function(data, container) {
   pictureBlock.querySelector('.picture-likes').textContent = data.likes;
 
   var newPhoto = new Image(182, 182);
-  newPhoto.onload = function() {
-    newPhoto.src = data.url;
+  var imgElement = pictureBlock.querySelector('img');
+  newPhoto.onload = function(evt) {
+    imgElement.src = evt.target.src;
   };
   newPhoto.onerror = function() {
     pictureBlock.classList.add('.picture-load-failure');
   };
-  newPhoto.src = data.url;
 
-  var pictureStats = pictureBlock.querySelector('.picture-stats');
-  pictureBlock.insertBefore(newPhoto, pictureStats);
+  newPhoto.src = data.url;
 
   container.appendChild(pictureBlock);
   return pictureBlock;
