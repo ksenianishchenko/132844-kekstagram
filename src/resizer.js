@@ -1,6 +1,6 @@
 'use strict';
 
-(function() {
+module.exports = (function() {
   /**
    * @constructor
    * @param {string} image
@@ -35,7 +35,7 @@
       // Изначально предлагаемое кадрирование — часть по центру с размером в 3/4
       // от размера меньшей стороны.
       this._resizeConstraint = new Square(
-          this._container.width / 2 - side / 2, this._container.height / 2 - side / 2,side);
+        this._container.width / 2 - side / 2, this._container.height / 2 - side / 2, side);
       // Отрисовка изначального состояния канваса.
       this.setConstraint();
     }.bind(this);
@@ -105,22 +105,22 @@
       // кадрирования. Координаты задаются от центра.
 
       this._ctx.moveTo(
-        -this._resizeConstraint.side / 2, 
+        -this._resizeConstraint.side / 2,
         -this._resizeConstraint.side / 2);
       this._ctx.lineTo(
-        -this._resizeConstraint.side / 2, 
+        -this._resizeConstraint.side / 2,
         this._resizeConstraint.side / 2);
       this._ctx.lineTo(
-        this._resizeConstraint.side / 2, 
+        this._resizeConstraint.side / 2,
         this._resizeConstraint.side / 2);
       this._ctx.lineTo(
-        this._resizeConstraint.side / 2, 
+        this._resizeConstraint.side / 2,
         -this._resizeConstraint.side / 2);
       this._ctx.lineTo(
-        -this._resizeConstraint.side / 2, 
+        -this._resizeConstraint.side / 2,
         -this._resizeConstraint.side / 2);
-      
-      
+
+
       this._ctx.rect(
         -this._container.width / 2,
         -this._container.height / 2,
@@ -130,7 +130,7 @@
       this._ctx.closePath();
 
       this._ctx.fill('evenodd');
-      
+
       //Отрисовка рамки.
       this._ctx.fillStyle = '#ffe753';
       var r = 3;
@@ -141,7 +141,7 @@
       var xPlus = this._resizeConstraint.side / 2;
       var yMinus = -this._resizeConstraint.side / 2;
       var yPlus = this._resizeConstraint.side / 2
-      
+
       var drawCircle = function(x,y, xEndPoint, yEndPoint) {
           ctx.beginPath();
           ctx.arc( x, y, r, startAngle, endAngle);
@@ -154,26 +154,26 @@
           while (y < yEndPoint) {
             ctx.arc( x, y, r, startAngle, endAngle);
             ctx.fill();
-            y = y + 10; 
+            y = y + 10;
           }
           ctx.closePath();
       };
-      
+
       drawCircle(xMinus, yMinus, xPlus, yMinus);
-      
+
       drawCircle(xPlus, yMinus, xPlus, yPlus);
-      
+
       drawCircle(xPlus, yPlus, xMinus, yPlus);
-      
+
       drawCircle(xMinus, yPlus, xPlus, yPlus);
-      
+
       drawCircle(xMinus, yMinus, xMinus, yPlus);
-      
+
       //Вывод размеров кодируемого изображения.
       this._ctx.font = '16px serif';
       this._ctx.fillStyle = '#fff';
       this._ctx.fillText(this._image.naturalWidth + ' х ' + this._image.naturalHeight, -30, (-this._resizeConstraint.side / 2) - 10);
-      
+
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
       // следующий кадр рисовался с привычной системой координат, где точка
