@@ -11,6 +11,7 @@ module.exports = (function() {
   }
   return function(data, container, index) {
     var pictureBlock = pictureBlockToClone.cloneNode(true);
+    pictureBlock.classList.add('picture-index-' + index);
     pictureBlock.querySelector('.picture-comments').textContent = data.comments;
     pictureBlock.querySelector('.picture-likes').textContent = data.likes;
 
@@ -20,7 +21,7 @@ module.exports = (function() {
       imgElement.src = evt.target.src;
     };
     newPhoto.onerror = function() {
-      pictureBlock.classList.add('.picture-load-failure');
+      pictureBlock.classList.add('picture-load-failure');
     };
 
     newPhoto.src = data.url;

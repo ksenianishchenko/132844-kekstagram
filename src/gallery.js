@@ -17,12 +17,25 @@ Gallery.prototype = {
   },
 
   show: function(selectedPicture) {
+
     var self = this;
     this.galleryOverlay.classList.remove('invisible');
     this.setActivePicture(selectedPicture);
     this.galleryOverlayClose.onclick = function() {
       self.hide();
     };
+
+    var pictureBlock = document.querySelector('.picture-index-' + selectedPicture);
+    if (pictureBlock.classList.contains('picture-load-failure')) {
+      if (selectedPicture + 1 >= self.pictures.length) {
+        self.show(0);
+      } else {
+        self.show(selectedPicture + 1);
+      }
+
+      return;
+    }
+
     this.galleryOverlayImage.onclick = function(evt) {
       evt.preventDefault();
       if (self.activePicture + 1 >= self.pictures.length) {
