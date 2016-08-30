@@ -23,9 +23,9 @@ Gallery.prototype = {
     this.galleryOverlayClose.onclick = function() {
       self.hide();
     };
-    this.galleryOverlayImage.onclick = function() {
-      self.galleryOverlayImage.onclick = null;
-      if(self.activePicture + 1 >= self.pictures.length) {
+    this.galleryOverlayImage.onclick = function(evt) {
+      evt.preventDefault();
+      if (self.activePicture + 1 >= self.pictures.length) {
         self.show(0);
       } else {
         self.show(self.activePicture + 1);
