@@ -30,7 +30,7 @@ module.exports = (function() {
     pictureBlock.onclick = function(e) {
       e.preventDefault();
       gallery.show(index);
-    }
+    };
     return pictureBlock;
   };
 })();
