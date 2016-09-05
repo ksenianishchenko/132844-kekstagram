@@ -36,6 +36,22 @@ var getPictureBlock = function(data, container) {
   var imgElement = pictureBlock.querySelector('img');
   newPhoto.onload = function(evt) {
     imgElement.src = evt.target.src;
+
+module.exports = (function() {
+  var createRequest = require('./load');
+  var getPictureBlock = require('./get-picture-block');
+  var gallery = require('./gallery');
+
+  window.pictures = [];
+  window.picturesList = function(pics) {
+    window.pictures = pics;
+    gallery.setPictures(pics);
+    var i = 0;
+    window.pictures.forEach(function(photo) {
+      getPictureBlock(photo, picturesContainer, i);
+      i++;
+    });
+
   };
   newPhoto.onerror = function() {
     pictureBlock.classList.add('.picture-load-failure');

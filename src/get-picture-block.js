@@ -1,6 +1,7 @@
 'use strict';
 
 module.exports = (function() {
+  var gallery = require('./gallery');
   var pictureTemplate = document.querySelector('#picture-template');
   var pictureBlockToClone;
   if('content' in pictureTemplate) {
@@ -8,8 +9,9 @@ module.exports = (function() {
   } else {
     pictureBlockToClone = pictureTemplate.querySelector('.picture');
   }
-  return function(data, container) {
+  return function(data, container, index) {
     var pictureBlock = pictureBlockToClone.cloneNode(true);
+    pictureBlock.classList.add('picture-index-' + index);
     pictureBlock.querySelector('.picture-comments').textContent = data.comments;
     pictureBlock.querySelector('.picture-likes').textContent = data.likes;
 
@@ -19,12 +21,17 @@ module.exports = (function() {
       imgElement.src = evt.target.src;
     };
     newPhoto.onerror = function() {
-      pictureBlock.classList.add('.picture-load-failure');
+      pictureBlock.classList.add('picture-load-failure');
     };
 
     newPhoto.src = data.url;
 
     container.appendChild(pictureBlock);
+
+    pictureBlock.onclick = function(e) {
+      e.preventDefault();
+      gallery.show(index);
+    };
     return pictureBlock;
   };
 })();
