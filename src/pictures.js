@@ -39,12 +39,25 @@ var getPictureBlock = function(data, container) {
   };
   newPhoto.onerror = function() {
     pictureBlock.classList.add('.picture-load-failure');
+
+  var filters = document.querySelector('.filters');
+  filters.classList.add('hidden');
+
+  createRequest('http://localhost:1506/api/pictures', 'picturesList');
+
+  var picturesContainer = document.querySelector('.pictures');
+
+  filters.classList.remove('hidden');
+})();
+
+module.exports = (function() {
+  var createRequest = require('./load');
+  var getPictureBlock = require('./get-picture-block');
+
+  window.pictures = [];
+  window.picturesList = function(pics) {
+    window.pictures = pics;
+    window.pictures.forEach(function(photo) {
+      getPictureBlock(photo, picturesContainer);
+    });
   };
-
-  newPhoto.src = data.url;
-
-  container.appendChild(pictureBlock);
-  return pictureBlock;
-};
-
-filters.classList.remove('hidden');
