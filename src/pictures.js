@@ -39,8 +39,8 @@ var getPictureBlock = function(data, container) {
 
 module.exports = (function() {
   var createRequest = require('./load');
-  var getPictureBlock = require('./get-picture-block');
   var gallery = require('./gallery');
+  var Picture = require('./picture');
 
   window.pictures = [];
   window.picturesList = function(pics) {
@@ -48,7 +48,8 @@ module.exports = (function() {
     gallery.setPictures(pics);
     var i = 0;
     window.pictures.forEach(function(photo) {
-      getPictureBlock(photo, picturesContainer, i);
+      var myPictureBlock = new Picture(photo, picturesContainer, i);
+      picturesContainer.appendChild(myPictureBlock.element);
       i++;
     });
 
