@@ -1,11 +1,20 @@
 'use strict';
 
 module.exports = (function() {
-  var createRequest = require('./load');
+  var load = require('./load');
   var gallery = require('./gallery');
   var Picture = require('./picture');
+  var PICTURES_URL = 'http://localhost:1506/api/pictures';
+  var THROTTLE_TIMEOUT = 100;
+  var filters = document.querySelector('.filters');
+  var picturesContainer = document.querySelector('.pictures');
+  var activeFilter = 'all';
+  var footer = document.querySelector('footer');
+  var pageNumber = 0;
+  var pageSize = 12;
 
   window.pictures = [];
+
   window.picturesList = function(pics) {
     window.pictures = pics;
     gallery.setPictures(pics);
@@ -17,12 +26,40 @@ module.exports = (function() {
     });
   };
 
-  var filters = document.querySelector('.filters');
   filters.classList.add('hidden');
-
-  createRequest('http://localhost:1506/api/pictures', 'picturesList');
-
-  var picturesContainer = document.querySelector('.pictures');
+  var loadPictures = function(filter, currentpage) {
+    load(PICTURES_URL, {
+      from: currentpage * pageSize,
+      to: currentpage * pageSize + pageSize,
+      filter: filter
+    }, window.picturesList);
+  };
 
   filters.classList.remove('hidden');
+
+  var filterChange = function(filterID) {
+    picturesContainer.innerHTML = '';
+    activeFilter = filterID;
+    pageNumber = 0;
+    loadPictures(filterID, pageNumber);
+  };
+
+  filters.addEventListener('click', function(evt) {
+    filterChange(evt.target.id);
+  });
+
+  var lastCall = Date.now();
+
+  window.addEventListener('scroll', function() {
+    if (Date.now() - lastCall >= THROTTLE_TIMEOUT) {
+      if (footer.getBoundingClientRect().bottom - window.innerHeight <= 0) {
+        loadPictures(activeFilter, pageNumber++);
+      }
+
+      lastCall = Date.now();
+    }
+  });
+
+  filterChange(activeFilter);
+
 })();

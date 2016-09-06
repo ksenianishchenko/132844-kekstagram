@@ -135,28 +135,28 @@ module.exports = (function() {
       this._ctx.fillStyle = '#ffe753';
       var r = 3;
       var startAngle = 0;
-      var endAngle = 2*Math.PI;
+      var endAngle = 2 * Math.PI;
       var ctx = this._ctx;
       var xMinus = -this._resizeConstraint.side / 2;
       var xPlus = this._resizeConstraint.side / 2;
       var yMinus = -this._resizeConstraint.side / 2;
-      var yPlus = this._resizeConstraint.side / 2
+      var yPlus = this._resizeConstraint.side / 2;
 
-      var drawCircle = function(x,y, xEndPoint, yEndPoint) {
-          ctx.beginPath();
+      var drawCircle = function(x, y, xEndPoint, yEndPoint) {
+        ctx.beginPath();
+        ctx.arc( x, y, r, startAngle, endAngle);
+        ctx.fill();
+        while (x < xEndPoint) {
           ctx.arc( x, y, r, startAngle, endAngle);
           ctx.fill();
-          while (x < xEndPoint) {
-            ctx.arc( x, y, r, startAngle, endAngle);
-            ctx.fill();
-            x = x + 10;
-          }
-          while (y < yEndPoint) {
-            ctx.arc( x, y, r, startAngle, endAngle);
-            ctx.fill();
-            y = y + 10;
-          }
-          ctx.closePath();
+          x = x + 10;
+        }
+        while (y < yEndPoint) {
+          ctx.arc( x, y, r, startAngle, endAngle);
+          ctx.fill();
+          y = y + 10;
+        }
+        ctx.closePath();
       };
 
       drawCircle(xMinus, yMinus, xPlus, yMinus);
