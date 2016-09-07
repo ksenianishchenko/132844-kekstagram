@@ -8,7 +8,7 @@ module.exports = (function() {
   var THROTTLE_TIMEOUT = 100;
   var filters = document.querySelector('.filters');
   var picturesContainer = document.querySelector('.pictures');
-  var activeFilter = 'all';
+  var activeFilter = 'filter-popular';
   var footer = document.querySelector('footer');
   var pageNumber = 0;
   var pageSize = 12;
@@ -45,14 +45,16 @@ module.exports = (function() {
   };
 
   filters.addEventListener('click', function(evt) {
-    filterChange(evt.target.id);
+    if(evt.target.classList.contains('filters-radio')) {
+      filterChange(evt.target.id);
+    }
   });
 
   var lastCall = Date.now();
 
   window.addEventListener('scroll', function() {
     if (Date.now() - lastCall >= THROTTLE_TIMEOUT) {
-      if (footer.getBoundingClientRect().bottom - window.innerHeight <= 0) {
+      if (footer.getBoundingClientRect().bottom - window.innerHeight <= 50) {
         loadPictures(activeFilter, pageNumber++);
       }
 
