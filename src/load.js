@@ -1,10 +1,18 @@
 'use strict';
 
 module.exports = (function() {
-  return function(src, jsonCallBack) {
-    var url = src + '?callback=' + jsonCallBack;
-    var scriptElem = document.createElement('script');
-    scriptElem.src = url;
-    document.body.appendChild(scriptElem);
+  return function(src, params, callback) {
+    var xhr = new XMLHttpRequest();
+
+    xhr.onload = function(evt) {
+      var loadData = JSON.parse(evt.target.response);
+      callback(loadData);
+    };
+
+    xhr.open('GET', src +
+        '?from=' + (params.from || 0) +
+        '&to=' + (params.to || Infinity) +
+        '&filter=' + (params.filter || 'default'));
+    xhr.send();
   };
 })();
