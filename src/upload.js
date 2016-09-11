@@ -8,6 +8,7 @@
 'use strict';
 
 module.exports = (function() {
+
   /** @enum {string} */
   var FileType = {
     'GIF': '',
@@ -171,6 +172,24 @@ module.exports = (function() {
     }
   }
 
+  var resizeXElement = document.querySelector('#resize-x');
+  var resizeYElement = document.querySelector('#resize-y');
+  var resizeSideElement = document.querySelector('#resize-size');
+  resizeXElement.addEventListener('change', onResizerValuesChanged);
+  resizeYElement.addEventListener('change', onResizerValuesChanged);
+  resizeSideElement.addEventListener('change', onResizerValuesChanged);
+
+  function onResizerValuesChanged(evt) {
+    evt.preventDefault();
+    currentResizer.setConstraint(resizeXElement.value, resizeYElement.value, resizeSideElement.value);
+  }
+
+  window.addEventListener('resizerchange', function() {
+    if (currentResizer) {
+      currentResizer.getConstraint();
+    }
+  });
+
   /**
    * Обработка сброса формы кадрирования. Возвращает в начальное состояние
    * и обновляет фон.
@@ -269,7 +288,6 @@ module.exports = (function() {
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
   }
-
   cleanupResizer();
   updateBackground();
 })();
