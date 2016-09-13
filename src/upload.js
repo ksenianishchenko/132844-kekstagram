@@ -188,9 +188,9 @@ module.exports = (function() {
   window.addEventListener('resizerchange', function() {
     if (currentResizer) {
       var constraint = currentResizer.getConstraint();
+      resizeSideElement.value = constraint.side;
       resizeXElement.value = constraint.x;
       resizeYElement.value = constraint.y;
-      resizeSideElement.value = constraint.side;
     }
   });
 
