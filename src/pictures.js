@@ -8,7 +8,7 @@ module.exports = (function() {
   var THROTTLE_TIMEOUT = 100;
   var filters = document.querySelector('.filters');
   var picturesContainer = document.querySelector('.pictures');
-  var activeFilter = 'filter-popular';
+  var activeFilter = localStorage.getItem('filterSaved') || 'filter-popular';
   var footer = document.querySelector('footer');
   var pageNumber = 0;
   var pageSize = 12;
@@ -42,6 +42,8 @@ module.exports = (function() {
     activeFilter = filterID;
     pageNumber = 0;
     loadPictures(filterID, pageNumber);
+    localStorage.setItem('filterSaved', filterID);
+    document.getElementById(filterID).checked = true;
   };
 
   filters.addEventListener('click', function(evt) {
