@@ -17,39 +17,35 @@ Gallery.prototype = {
   },
 
   show: function(selectedPicture) {
-
-    var self = this;
     this.galleryOverlay.classList.remove('invisible');
     this.setActivePicture(selectedPicture);
     this.galleryOverlayClose.onclick = function() {
-      self.hide();
-    };
+      this.hide();
+    }.bind(this);
 
     var pictureBlock = document.querySelector('.picture-index-' + selectedPicture);
     if (pictureBlock.classList.contains('picture-load-failure')) {
-      if (selectedPicture + 1 >= self.pictures.length) {
-        self.show(0);
+      if (selectedPicture + 1 >= this.pictures.length) {
+        this.show(0);
       } else {
-        self.show(selectedPicture + 1);
+        this.show(selectedPicture + 1);
       }
-
       return;
     }
 
     this.galleryOverlayImage.onclick = function(evt) {
       evt.preventDefault();
-      if (self.activePicture + 1 >= self.pictures.length) {
-        self.show(0);
+      if (this.activePicture + 1 >= this.pictures.length) {
+        this.show(0);
       } else {
-        self.show(self.activePicture + 1);
+        this.show(this.activePicture + 1);
       }
-    };
+    }.bind(this);
   },
 
   hide: function() {
-    var self = this;
-    self.galleryOverlay.classList.add('invisible');
-    self.galleryOverlayClose.onclick = null;
+    this.galleryOverlay.classList.add('invisible');
+    this.galleryOverlayClose.onclick = null;
   },
 
   setActivePicture: function(pictureId) {
